@@ -1,0 +1,73 @@
+<%
+/*
+<!--
+
+    Copyright (C) 2003-2007 eXo Platform SAS.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Affero General Public License
+    as published by the Free Software Foundation; either version 3
+    of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, see<http://www.gnu.org/licenses/>.
+
+-->
+*/
+%>
+<%
+  import org.exoplatform.services.organization.User;
+  import org.exoplatform.services.security.ConversationState;
+  import org.exoplatform.web.CacheUserProfileFilter;
+  import org.exoplatform.webui.core.UIPopupWindow;
+  import org.exoplatform.social.webui.Utils;
+  import org.exoplatform.social.webui.profile.UITitleBar;
+  uicomponent.reloadBasicInfo();
+
+  def isEdit = uicomponent.isEditMode();
+  def isEditable = uicomponent.isEditable();
+  def children = uicomponent.getChilds();
+  _ctx.getRequestContext().getJavascriptManager().require("SHARED/uiForm");
+%>
+<div class="uiBasicInfoSection">
+  <% uiform.begin() %>
+  <% uicomponent.renderChild(UITitleBar.class); %>
+  <div class="form-horizontal">
+        <div class="control-group">
+          <label class="control-label" for="<%=children.get(1).getId()%>"><strong>Building Name:</strong></label>
+          <div class="controls">
+          <% if (isEdit) {
+               uiform.renderField(children.get(1));
+             } else { %>
+               <%=children.get(1).getValue(); %>
+          <% } %>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="<%=children.get(2).getId()%>"><strong>Floor Number:</strong></label>
+          <div class="controls">
+            <% if (isEdit) {
+                 uiform.renderField(children.get(2));
+               } else { %>
+                 <%=children.get(2).getValue(); %>
+            <% } %>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="<%=children.get(3).getId()%>"><strong>Room Number:</strong></label>
+          <div class="controls">
+          <% if (isEdit) {
+            uiform.renderField(children.get(3));
+             } else { %>
+                 <%=children.get(3).getValue(); %>
+            <% } %>
+          </div>
+        </div>
+  </div>
+  <% uiform.end() %>
+</div>

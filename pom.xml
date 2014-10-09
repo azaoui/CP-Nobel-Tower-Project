@@ -41,7 +41,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 		<!--<module>config</module>-->
 		<!--<module>war</module>-->
 		<module>portlets</module>
-		<!--<module>services</module>-->
+		<module>services</module>
 	</modules>
 	<build>
 		<pluginManagement>

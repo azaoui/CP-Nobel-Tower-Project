@@ -18,8 +18,7 @@ package org.exoplatform.social.portlet;
         
         
 
-import org.exoplatform.social.webui.profile.UIProfile;
-//to be changed to custom UIPRofile then we add some section 
+import org.nobeltower.social.webui.profile.CustomUIProfile;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
@@ -35,7 +34,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 public class CustomProfilePortlet extends UIPortletApplication {
 
   public CustomProfilePortlet() throws Exception {
-    addChild(UIProfile.class, null, null);
+    addChild(CustomUIProfile.class, null, null);
   }
 
 }
