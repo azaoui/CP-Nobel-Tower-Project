@@ -18,7 +18,7 @@ package org.exoplatform.social.portlet;
         
         
 
-import org.nobeltower.social.webui.profile.CustomUIProfile;
+import org.nobeltower.social.webui.profile.UICustomProfile;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
@@ -29,12 +29,13 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  */
 @ComponentConfig(
   lifecycle = UIApplicationLifecycle.class,
-  template = "app:/groovy/social/portlet/UIProfilePortlet.gtmpl"
+  template = "app:/groovy/social/portlet/CustomProfilePortlet.gtmpl"
 )
 public class CustomProfilePortlet extends UIPortletApplication {
 
   public CustomProfilePortlet() throws Exception {
-    addChild(CustomUIProfile.class, null, null);
+
+   addChild(UICustomProfile.class, null, null);
   }
 
 }

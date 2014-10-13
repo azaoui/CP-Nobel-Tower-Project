@@ -16,9 +16,6 @@
     along with this program; if not, see<http://www.gnu.org/licenses/>.
 
 -->
-<webui-configuration>
-  <application>
-    <ui-component-root>org.exoplatform.social.portlet.CustomProfilePortlet</ui-component-root>
-    <state-manager>org.exoplatform.webui.application.portlet.ParentAppStateManager</state-manager>
-  </application>
-</webui-configuration>
+<div class="uiSocApplication" id="$uicomponent.id">
+  <% uicomponent.renderChildren(); %>
+</div>

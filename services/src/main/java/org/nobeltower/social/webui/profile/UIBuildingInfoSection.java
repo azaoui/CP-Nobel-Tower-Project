@@ -22,8 +22,8 @@ import org.exoplatform.social.core.identity.model.Identity;
 import org.exoplatform.social.core.identity.model.Profile;
 import org.exoplatform.social.webui.Utils;
 import org.nobeltower.social.webui.profile.UIBuildingInfoSection;
-import org.exoplatform.social.webui.profile.UIProfileSection;
-import org.exoplatform.social.webui.profile.UITitleBar;
+import org.nobeltower.social.webui.profile.UICustomProfileSection;
+import org.nobeltower.social.webui.profile.UITitleBar;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -43,14 +43,14 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 @ComponentConfig(
   lifecycle = UIFormLifecycle.class,
-  template = "war:/groovy/social/webui/profile/UIBuildingInfoSection.gtmpl",
+  template = "classpath:groovy/social/webui/profile/UIBuildingInfoSection.gtmpl",
   events = {
     @EventConfig(listeners = UIBuildingInfoSection.EditActionListener.class, phase = Phase.DECODE),
     @EventConfig(listeners = UIBuildingInfoSection.SaveActionListener.class, csrfCheck = true),
     @EventConfig(listeners = UIBuildingInfoSection.CancelActionListener.class, phase = Phase.DECODE)
   }
 )
-public class UIBuildingInfoSection extends UIProfileSection {
+public class UIBuildingInfoSection extends UICustomProfileSection {
 	
 	public static final String BUILDING_CHILD = "building";
 	public static final String Floor_CHILD = "floor";
@@ -68,9 +68,9 @@ public class UIBuildingInfoSection extends UIProfileSection {
    // addUIFormInput(new UIFormStringInput(Profile.ROOM_NUMBER, Profile.ROOM_NUMBER, null));
    // addUIFormInput(new UIFormStringInput(Profile.FLOOR_NUMBER, Profile.FLOOR_NUMBER, null));
     
-    addUIFormInput(new UIFormStringInput(BUILDING_CHILD, null, null));
-    addUIFormInput(new UIFormStringInput(Floor_CHILD, null, null));
-    addUIFormInput(new UIFormStringInput(Room_CHILD, null, null));
+    addUIFormInput(new UIFormStringInput(BUILDING_CHILD, "no value entred", null));
+    addUIFormInput(new UIFormStringInput(Floor_CHILD, "no value entred", null));
+    addUIFormInput(new UIFormStringInput(Room_CHILD, "no value entred", null));
     
 
     /*addUIFormInput(new UIFormStringInput(Profile.FLOOR_NUMBER,
@@ -88,7 +88,16 @@ public class UIBuildingInfoSection extends UIProfileSection {
    * Reloads basic info in each request call
    */
   public void reloadBasicInfo() {
-
+	  if (isFirstLoad() == false) {
+	      Identity ownerIdentity = Utils.getOwnerIdentity(false);
+	      Profile profile = ownerIdentity.getProfile();
+	      this.getUIStringInput(BUILDING_CHILD).setValue((String) profile.getProperty("buildingName"));
+	      this.getUIStringInput(Floor_CHILD).setValue((String) profile.getProperty("floorNumber"));
+	      this.getUIStringInput(Room_CHILD).setValue((String) profile.getProperty("roomNumber"));
+	      
+	      if (isEditMode())
+	        setFirstLoad(true);
+	    }
   }
 
   /**
@@ -103,12 +112,12 @@ public class UIBuildingInfoSection extends UIProfileSection {
   /**
    * Changes form into edit mode when user click edit button.<br>
    */
-  public static class EditActionListener extends UIProfileSection.EditActionListener {
+  public static class EditActionListener extends UICustomProfileSection.EditActionListener {
 
     @Override
-    public void execute(Event<UIProfileSection> event) throws Exception {
+    public void execute(Event<UICustomProfileSection> event) throws Exception {
       super.execute(event);
-      UIProfileSection sect = event.getSource();
+      UICustomProfileSection sect = event.getSource();
       UIBuildingInfoSection uiForm = (UIBuildingInfoSection) sect;
       WebuiRequestContext requestContext = event.getRequestContext();
       requestContext.addUIComponentToUpdateByAjax(uiForm);
@@ -120,10 +129,10 @@ public class UIBuildingInfoSection extends UIProfileSection {
   /**
    * Stores profile information into database when form is submitted.<br>
    */
-  public static class SaveActionListener extends UIProfileSection.SaveActionListener {
+  public static class SaveActionListener extends UICustomProfileSection.SaveActionListener {
 
     @Override
-    public void execute(Event<UIProfileSection> event) throws Exception {
+    public void execute(Event<UICustomProfileSection> event) throws Exception {
       super.execute(event);
 
       UIBuildingInfoSection uiForm = (UIBuildingInfoSection) event.getSource();
@@ -155,15 +164,16 @@ public class UIBuildingInfoSection extends UIProfileSection {
       Profile profile = viewerIdentity.getProfile();
       boolean profileHasUpdated = false;
       if (buildingName!= null) {
-      //  profile.setProperty(Profile.BUILDING_NAME, buildingName);
+        profile.setProperty("buildingName", buildingName);
         profileHasUpdated = true;
       }
       if (floorNumber!= null) {
        // profile.setProperty(Profile.FLOOR_NUMBER, floorNumber);
+    	  profile.setProperty("floorNumber", floorNumber);
         profileHasUpdated = true;
       }
       if (roomNumber!= null) {
-        //profile.setProperty(Profile.ROOM_NUMBER, roomNumber);
+    	  profile.setProperty("roomNumber", roomNumber);
         profileHasUpdated = true;
       }
       if (profileHasUpdated) {
