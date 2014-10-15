@@ -46,7 +46,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 @ComponentConfig(
   lifecycle = UIFormLifecycle.class,
-  template = "classpath:groovy/social/webui/profile/UIProfileUserSearch.gtmpl",
+  template = "classpath:groovy/social/webui/profile/UICustomProfileUserSearch.gtmpl",
   events = {
     @EventConfig(listeners = UIProfileUserSearch.SearchActionListener.class)
   }
@@ -303,6 +303,7 @@ public class UIProfileUserSearch extends UIForm {
     String defaultName = resourceBudle.getString("UIProfileUserSearch.label.Name");
     String defaultPos = resourceBudle.getString("UIProfileUserSearch.label.Position");
     String defaultSkills = resourceBudle.getString("UIProfileUserSearch.label.Skills");
+    String defaultBuildingName="building";
 
     UIFormStringInput search = new UIFormStringInput(SEARCH, USER_CONTACT, defaultName);
     search.setHTMLAttribute(HTML_ATTRIBUTE_TITLE, defaultName);
@@ -313,6 +314,17 @@ public class UIProfileUserSearch extends UIForm {
     UIFormStringInput skills = new UIFormStringInput(Profile.EXPERIENCES_SKILLS, Profile.EXPERIENCES_SKILLS, defaultSkills);
     skills.setHTMLAttribute(HTML_ATTRIBUTE_TITLE, defaultSkills);
     addUIFormInput(skills);
+    UIFormStringInput building = new UIFormStringInput("building", "building", defaultBuildingName);
+    building.setHTMLAttribute(HTML_ATTRIBUTE_TITLE, defaultBuildingName);
+    addUIFormInput(building);
+    UIFormStringInput floor = new UIFormStringInput("floor", "floor", defaultBuildingName);
+    building.setHTMLAttribute(HTML_ATTRIBUTE_TITLE, "floor");
+    addUIFormInput(floor);
+    UIFormStringInput room = new UIFormStringInput("room", "room", defaultBuildingName);
+    building.setHTMLAttribute(HTML_ATTRIBUTE_TITLE, "room");
+    addUIFormInput(room);
+
+    
     profileFilter = new ProfileFilter();
     setHasPeopleTab(false);
     setSubmitAction("return false;");
@@ -337,6 +349,14 @@ public class UIProfileUserSearch extends UIForm {
       String defaultSkills = resourceBudle.getString("UIProfileUserSearch.label.Skills");
       uiSkills.setValue(defaultSkills);
     }
+    
+    //reset building section
+    UIFormStringInput uibuilding = getChildById("building");
+    uibuilding.setValue("building");
+    UIFormStringInput uifloor = getChildById("floor");
+    uifloor.setValue("floor");
+    UIFormStringInput uiroom = getChildById("room");
+    uiroom.setValue("room");
   }
   
   /**
@@ -369,7 +389,18 @@ public class UIProfileUserSearch extends UIForm {
       excludedIdentityList.add(Utils.getViewerIdentity());
       filter.setExcludedIdentityList(excludedIdentityList);
       
+      //in order to use the predefined ProfileFilter we workaround issue when mapBean uiSearch to the profileFilter by removing the custom child before invokeSetBindingBean then restore them
+	  UIComponent  uibuilding =uiSearch.getChildById("building");
+	  uiSearch.removeChildById(uibuilding.getId());
+	  UIComponent  uifloor =uiSearch.getChildById("floor");
+	  uiSearch.removeChildById(uifloor.getId());
+	  UIComponent  uiroom =uiSearch.getChildById("room");
+	  uiSearch.removeChildById(uiroom.getId());
       uiSearch.invokeSetBindingBean(filter);
+      uiSearch.addChild(uibuilding);
+      uiSearch.addChild(uifloor);
+      uiSearch.addChild(uiroom);
+      
       normalizeInputValues(filter);
       ResourceBundle resApp = ctx.getApplicationResourceBundle();
 

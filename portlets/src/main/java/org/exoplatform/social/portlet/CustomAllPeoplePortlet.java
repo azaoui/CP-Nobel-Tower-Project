@@ -16,7 +16,7 @@
  */
 package org.exoplatform.social.portlet;
 
-import org.exoplatform.social.webui.connections.UIAllPeople;
+import org.nobeltower.social.webui.connections.CustomUIAllPeople;
 //should be replaced with the custom component child 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
@@ -29,7 +29,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 public class CustomAllPeoplePortlet extends UIPortletApplication {
 
   public CustomAllPeoplePortlet() throws Exception {
-    addChild(UIAllPeople.class, null, null);
+    addChild(CustomUIAllPeople.class, null, null);
   }
 
 }

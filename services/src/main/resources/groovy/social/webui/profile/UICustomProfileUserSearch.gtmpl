@@ -98,6 +98,9 @@
 		<% uiform.renderField(childs.get(0));%>&nbsp;&nbsp;
 		<% uiform.renderField(childs.get(1))%>&nbsp;&nbsp;
 		<% uiform.renderField(childs.get(2))%>&nbsp;&nbsp;
+		<% uiform.renderField(childs.get(3));%>&nbsp;&nbsp;
+		<% uiform.renderField(childs.get(4))%>&nbsp;&nbsp;
+		<% uiform.renderField(childs.get(5))%>&nbsp;&nbsp;
 		<button type="button" class="btn btn-primary" id="SearchButton" onclick="<%=uicomponent.event("Search")%>" ><%= searchActionLabel %></button>
    </div>
  <% uiform.end() %>
